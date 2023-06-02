@@ -15,11 +15,7 @@ class OrderComplete extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $currencySymbol;
-
-    public $payment_link;
-
-    public $mail;
+    public $currencySymbol, $payment_link, $mail, $find, $replace;
 
     /**
      * Create a new message instance.
@@ -44,11 +40,8 @@ class OrderComplete extends Mailable
                 break;
         }
 
-        $find = ['{first_name}', '{last_name}', '{order_id}', '{order_total}', '{order_currency}', '{order_payment}'];
-        $replace = [$order->first_name, $order->last_name, $order->id, $order->price, $order->currency, $order->payment];
-
-        $this->mail->content_html = str_replace($find, $replace, $this->mail->content_html);
-        $this->mail->content_text = str_replace($find, $replace, $this->mail->content_text);
+        $this->find = ['{first_name}', '{last_name}', '{order_id}', '{order_total}', '{order_currency}', '{order_payment}'];
+        $this->replace = [$order->baptism_name ?? $order->first_name, $order->last_name, $order->id, $order->price / 100, $order->currency, $order->payment];
     }
 
     /**

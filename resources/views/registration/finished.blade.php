@@ -8,7 +8,7 @@
         <div class="my-12 static-page">
 
             @if($page)
-            {!! str_replace(['{first_name}', '{total}'], [$order->first_name, ($order->price / 100)], $page->content) !!}
+            {!! str_replace(['{first_name}', '{order_total}'], [$order->baptism_name ?? $order->first_name, ($order->price / 100)], $page->content) !!}
             @else
             {{ __('general.thank_you') }}
             @endif

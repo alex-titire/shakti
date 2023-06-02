@@ -60,10 +60,10 @@ Route::prefix('crons')->group(function() {
 //});
 
 Route::get('/mailable', function () {
-    $item = \App\Models\Order::find(341);
+    $item = \App\Models\Order::find(7);
 
 //    Mail::to("alex.titire@pm.me")->send(new \App\Mail\EmailEventFinished($item));
-    return new \App\Mail\EmailCodeMtvSent($item);
+    return new \App\Mail\OrderComplete($item);
 });
 
 Route::get('/mailable/en', function () {

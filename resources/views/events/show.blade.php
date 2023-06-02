@@ -87,11 +87,11 @@
                 <!-- Baptismal name -->
                 <div class="mt-3">
                     <x-label class="mb-1" :value="__('general.baptism_name_check')" />
-                    <x-button-choice @click="baptism = true" activator="baptism == true">{{ __('general.yes') }}</x-button-choice>
-                    <x-button-choice @click="baptism = false; bn = ''" activator="baptism == false">{{ __('general.no') }}</x-button-choice>
+                    <x-button-choice @click="baptism = 1" activator="baptism === 1">{{ __('general.yes') }}</x-button-choice>
+                    <x-button-choice @click="baptism = 0; bn = ''" activator="baptism === 0">{{ __('general.no') }}</x-button-choice>
                 </div>
 
-                <div class="mt-3" x-cloak x-show="baptism == true">
+                <div class="mt-3" x-cloak x-show="baptism === 1">
                     <x-label for="baptism_name" :value="__('general.baptism_name')" />
 
                     <x-input id="baptism_name" class="block mt-1 w-full"
@@ -414,7 +414,7 @@
     function registration() {
         return {
             gender: '{{ old('gender') ? old('gender') : 'false' }}',
-            baptism: '{{ old('baptism_name') ? 'true' : 'false' }}',
+            baptism: {{ old('baptism_name') ? 1 : 0 }},
             bn: '{{ old('baptism_name') ? old('baptism_name') : '' }}',
             hasAza: {{ old('has_aza') ? old('has_aza') : 'false' }},
             azaType: '{{ old('aza') ? old('aza') : '' }}',
