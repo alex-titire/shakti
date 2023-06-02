@@ -1,0 +1,38 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+html {
+    font-family: 'PT Sans', Arial, Helvetica, sans-serif;
+}
+
+.container {
+    @apply px-4 max-w-screen-md;
+}
+
+[type='checkbox'], [type='radio'] {
+    @apply text-pink-400;
+
+    &:focus {
+        @apply ring-pink-400;
+    }
+}
+
+.toggle input:checked ~ .dot {
+  transform: translateX(100%);
+  @apply bg-pink-400;
+}
+
+.static-page {
+    ul {
+        @apply list-disc pl-6;
+    }
+
+    a {
+        @apply text-pink-700;
+    }
+
+    * + p {
+        @apply mt-4;
+    }
+}
