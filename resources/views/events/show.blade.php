@@ -102,7 +102,7 @@
                     />
                 </div>
 
-                    <!-- Course group -->
+                <!-- Course group -->
                 <div class="mt-3">
                     <x-label for="group" :value="__('general.group')" />
 
@@ -323,7 +323,7 @@
                 <div class="mt-8" x-show="total > 0" x-cloak>
                     <p class="text-2xl font-bold">
                         {{ __('general.total_pay') }}:
-                        <span class="text-red-500" x-text="total / 100 +' '+ currencyLocale[currency]"></span>
+                        <span class="text-red-500" x-text="total +' '+ currencyLocale[currency]"></span>
                     </p>
                     @if ($event->early_bird_deadline > now())
                         <p class="text-red-400 font-semibold italic text-sm">{{ __('general.early_bird_price') }} {{ $event->early_bird_deadline->format("j M Y @ H:i") }}</p>
@@ -333,10 +333,10 @@
                     <input type="hidden" name="payment" x-model="payment" required>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-3">
-                        <div class="bg-white opacity-60 rounded-lg p-4" :class="{ 'ring ring-pink-300' : payment == 'card'}">
+                        <div class="bg-white rounded-lg p-4 cursor-pointer hover:bg-pink-100" @click="payment = 'card'" :class="{ 'ring ring-pink-300' : payment == 'card'}">
                             <p class="font-bold tracking-wide uppercase">{{ __('general.payment_card') }}</p>
-                            {{-- <p class="text-gray-600 text-sm mt-4">{{ __('general.card_description') }}</p> --}}
-                            <p class="text-gray-600 text-sm mt-4">{{ __('general.available_soon') }}</p>
+                            <p class="text-gray-600 text-sm mt-4">{{ __('general.card_description') }}</p>
+                            {{-- <p class="text-gray-600 text-sm mt-4">{{ __('general.available_soon') }}</p> --}}
                         </div>
                         <div class="bg-white rounded-lg p-4 cursor-pointer hover:bg-pink-100" @click="payment = 'transfer'" :class="{ 'ring ring-pink-300' : payment == 'transfer'}">
                             <p class="font-bold tracking-wide uppercase">{{ __('general.payment_transfer') }}</p>

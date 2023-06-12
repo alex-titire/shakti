@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,7 +24,7 @@ if (in_array($locale, config('app.available_locales'))) {
 
 $language = \Illuminate\Support\Facades\App::currentLocale();
 
-Route::view('/', 'welcome');
+Route::view('/', 'welcome')->name('home');
 
 Route::prefix($locale)->group(function () use ($language) {
 
@@ -31,6 +32,9 @@ Route::prefix($locale)->group(function () use ($language) {
 
     Route::get('registration/{event}', [\App\Http\Controllers\EventController::class, 'registration'])->name('events.registration');
     Route::post('registration/{event}', [\App\Http\Controllers\OrderController::class, 'store'])->name('registration.store');
+
+    Route::get('checkout/{order}', [\App\Http\Controllers\OrderController::class, 'checkout'])->name('registration.checkout');
+    Route::get('payment/{order}/{status}', [\App\Http\Controllers\OrderController::class, 'card_return'])->name('registration.card_return');
 
     Route::get('thank_you/{order}', [\App\Http\Controllers\OrderController::class, 'thank_you'])->name('registration.finished');
 

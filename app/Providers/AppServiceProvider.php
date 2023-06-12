@@ -20,12 +20,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Blade::directive('money', function ($amount) {
+        /* Blade::directive('money', function ($amount) {
 
             $value = ((int) $amount) / 100;
             if ($value !== ceil($value))
                 $value = number_format($value, 2);
             return "<?php echo $value; ?>";
-        });
+        }); */
     }
 }

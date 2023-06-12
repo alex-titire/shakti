@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Currency;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +32,16 @@ class Event extends Model
         'registration_start' => 'datetime',
         'registration_end' => 'datetime',
         'early_bird_deadline' => 'datetime',
+        'price_ron' => Currency::class,
+        'price_eur' => Currency::class,
+        'price_online_ron' => Currency::class,
+        'price_online_eur' => Currency::class,
+        'price_coordinator_ron' => Currency::class,
+        'price_coordinator_eur' => Currency::class,
+        'price_ashram_ron' => Currency::class,
+        'price_ashram_eur' => Currency::class,
+        'early_bird_value_ron' => Currency::class,
+        'early_bird_value_eur' => Currency::class,
     ];
 
     /**

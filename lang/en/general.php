@@ -91,4 +91,5 @@ return [
     'online' => 'online',
     'early_bird_price' => 'Prices valid until',
     'available_soon' => 'Available soon',
+    'cardholder_name' => 'Cardholder name',
 ];

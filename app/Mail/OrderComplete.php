@@ -22,7 +22,7 @@ class OrderComplete extends Mailable
      */
     public function __construct(public Order $order)
     {
-        $this->currencySymbol = ($order->currency == "EUR" ? "€" : "Lei");
+        $this->currencySymbol = ($order->currency == "eur" ? "€" : "Lei");
         $this->payment_link = $order->getPaymentLink();
 
         switch ($order->payment) {

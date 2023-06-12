@@ -91,4 +91,5 @@ return [
     'online' => 'online',
     'early_bird_price' => 'Prețuri valabile până în data de',
     'available_soon' => 'Disponibil în curând',
+    'cardholder_name' => 'Numele de pe card',
 ];
