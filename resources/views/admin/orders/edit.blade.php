@@ -247,7 +247,7 @@
                                                 name="payment"
                                                 class="w-full"
                                 >
-                                    @foreach(['cash', 'online', 'transfer'] as $type)
+                                    @foreach(['cash', 'online', 'bank'] as $type)
                                         <option value="{{ $type }}" {{ old('payment', $user->payment) == $type ? ' selected="selected"' : '' }}>{{ $type }}</option>
                                     @endforeach
                                 </x-admin.select>

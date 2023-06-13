@@ -338,7 +338,7 @@
                             <p class="text-gray-600 text-sm mt-4">{{ __('general.card_description') }}</p>
                             {{-- <p class="text-gray-600 text-sm mt-4">{{ __('general.available_soon') }}</p> --}}
                         </div>
-                        <div class="bg-white rounded-lg p-4 cursor-pointer hover:bg-pink-100" @click="payment = 'transfer'" :class="{ 'ring ring-pink-300' : payment == 'transfer'}">
+                        <div class="bg-white rounded-lg p-4 cursor-pointer hover:bg-pink-100" @click="payment = 'bank'" :class="{ 'ring ring-pink-300' : payment == 'bank'}">
                             <p class="font-bold tracking-wide uppercase">{{ __('general.payment_transfer') }}</p>
                             <p class="text-gray-600 text-sm mt-4">{{ __('general.transfer_description') }}</p>
                         </div>

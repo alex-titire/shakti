@@ -42,7 +42,7 @@ class OrderComplete extends Mailable
                 $this->mail = $this->order->email_confirmation_card;
                 break;
 
-            case 'transfer':
+            case 'bank':
                 $this->mail = $this->order->email_confirmation_bank;
                 break;
 

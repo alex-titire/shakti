@@ -47,7 +47,7 @@ class StoreRegistrationRequest extends FormRequest
             'aza' => 'required_if:has_aza,2',
             'student' => 'required|in:en,ro',
             'attending' => 'required|in:live,online',
-            'payment' => 'required|in:cash,card,transfer',
+            'payment' => 'required|in:cash,card,bank',
             'agreement_req' => 'required',
             'privacy_req' => 'required',
             'terms_req' => 'required',

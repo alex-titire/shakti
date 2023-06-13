@@ -151,7 +151,7 @@ class Order extends Resource
                 'RON' => 'RON'
             ]),
             Select::make('Payment')->filterable()->sortable()->options([
-                'transfer'  => 'Bank transfer',
+                'bank'      => 'Bank transfer',
                 'card'      => 'Online Card',
                 'cash'      => 'Cash'
             ]),

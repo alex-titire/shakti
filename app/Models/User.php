@@ -108,7 +108,7 @@ class User extends Authenticatable
             'first_name' => Str::upper($data->first_name),
             'last_name' => Str::upper($data->last_name),
             'baptism_name' => strlen(trim($data->baptism_name)) ? Str::upper($data->baptism_name) : null,
-            'name' => Str::title($data->baptism_name ?? $data->first_name .' '. $data->last_name),
+            'name' => Str::title($data->baptism_name ?? $data->first_name) .' '. Str::title($data->last_name),
             'gender' => Str::upper($data->gender),
             'yoga_year' => (int) $data->group > 0 ? Carbon::now()->year - (Carbon::now()->month < 9 ? $data->group : $data->group - 1) : null,
             'city' => Str::upper($data->city),

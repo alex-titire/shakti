@@ -30,7 +30,7 @@ class OrderComplete extends Mailable
                 $this->mail = $order->event->email_card;
                 break;
 
-            case 'transfer':
+            case 'bank':
                 $this->mail = $order->event->email_bank;
                 break;
 
