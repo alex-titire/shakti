@@ -51,7 +51,7 @@ class MailingList extends Resource
         return [
             ID::make()->sortable(),
             Text::make('Title'),
-            BelongsToMany::make('Subscribers')
+            BelongsToMany::make('User')
         ];
     }
 

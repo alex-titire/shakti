@@ -72,6 +72,13 @@ class Order extends Resource
     public static $tableStyle = 'tight';
 
     /**
+     * The pagination per-page options configured for this resource.
+     *
+     * @return array
+     */
+    public static $perPageOptions = [50, 100, 150];
+
+    /**
      * Get the fields displayed by the resource.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
@@ -181,20 +188,20 @@ class Order extends Resource
                     'ID' => $model->getKey(),
                     'Nume' => $model->last_name,
                     'Prenume' => $model->first_name,
-                    'Nume Botez' => $model->baptism_name,
-                    'Sex' => $model->sex,
-                    'Data Nasterii' => $model->dob->format('d.m.Y'),
-                    'An curs' => $model->yoga_year,
-                    'Oras' => $model->city,
+                    'Nume Botez' => $model->user->baptism_name,
+                    'Sex' => $model->user->gender,
+                    'Data Nasterii' => $model->user->dob->format('d.m.Y'),
+                    'An curs' => $model->user->yoga_year,
+                    'Oras' => $model->user->city,
                     'Telefon' => $model->phone,
                     'Email' => $model->email,
-                    'AZA' => $model['aza'] > 0 ? "AZA". $model['aza'] : "-",
-                    'Participare curs' => $model->yoga_attendance,
-                    'Limba' => $model->language,
-                    'Instructor' => $model->is_instructor > 0 ? 'Yes' : 'No',
-                    'Ashram' => $model->is_in_ashram > 0 ? 'Yes' : 'No',
+                    'AZA' => $model->user->aza > 0 ? "AZA". $model->user->aza : "-",
+                    'Participare curs' => $model->user->yoga_attendance,
+                    'Limba' => $model->user->language,
+                    'Instructor' => $model->user->is_instructor > 0 ? 'Yes' : 'No',
+                    'Ashram' => $model->user->is_in_ashram > 0 ? 'Yes' : 'No',
                     'Participare tabără' => $model->attendance,
-                    'Pret' => ($model->price / 100) .' '. $model->currency,
+                    'Pret' => $model->price .' '. $model->currency,
                     'Plata' => $model->payment,
                     'Status' => $model->order_status->caption,
                     'Cod MTV' => $model->mtv_code,

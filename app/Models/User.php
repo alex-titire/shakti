@@ -102,6 +102,19 @@ class User extends Authenticatable
         );
     }
 
+    /**
+     * Get the yoga year formated
+     *
+     * @return  \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function yogaYear(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => (int) Carbon::now()->year - $value + (Carbon::now()->month < 9 ? 0 : 1),
+            set: fn (string $value) => (int) Carbon::now()->year - $value - (Carbon::now()->month < 9 ? 0 : 1),
+        );
+    }
+
     public function updateDetails($data) {
 
         $this->fill([
@@ -110,7 +123,7 @@ class User extends Authenticatable
             'baptism_name' => strlen(trim($data->baptism_name)) ? Str::upper($data->baptism_name) : '',
             'name' => Str::title($data->baptism_name ?? $data->first_name) .' '. Str::title($data->last_name),
             'gender' => Str::upper($data->gender),
-            'yoga_year' => (int) $data->group > 0 ? Carbon::now()->year - (Carbon::now()->month < 9 ? $data->group : $data->group - 1) : null,
+            'yoga_year' => (int) $data->group > 0 ? $data->group : null,
             'city' => Str::upper($data->city),
             'dob' => $data->dob_year ."-". $data->dob_month ."-". $data->dob_day,
             'phone' => $data->phone,

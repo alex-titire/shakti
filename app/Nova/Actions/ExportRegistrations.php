@@ -79,20 +79,20 @@ class ExportRegistrations extends Action
             if ($item->order_status_id == $fields['status'] && (int) $fields['status_check'] > 0)
                 continue ;
 
-            $sex = strtoupper($item->sex);
-            $date = date("d.m.Y", strtotime($item->dob));
-            $aza = $item['aza'] > 0 ? "AZA". $item['aza'] : "-";
+            $sex = strtoupper($item->user->gender);
+            $date = date("d.m.Y", strtotime($item->user->dob));
+            $aza = $item->user->aza > 0 ? "AZA". $item->user->aza : "-";
             $name = str_replace([","], ' ', $item->first_name ." ". $item->last_name);
-            $baptism = str_replace([","], '', $item->baptism_name);
-            $city = str_replace(",", ' ', $item->city);
+            $baptism = str_replace([","], '', $item->user->baptism_name);
+            $city = str_replace(",", ' ', $item->user->city);
             $image = str_replace("registrations/{$item->event_id}/", "", $item->picture_front);
-            $is_instructor = $item->is_instructor > 0 ? "Yes" : "No";
-            $is_in_ashram = $item->is_in_ashram > 0 ? "Yes" : "No";
-            $price = $item->price / 100 ." ". $item->currency;
+            $is_instructor = $item->user->is_instructor > 0 ? "Yes" : "No";
+            $is_in_ashram = $item->user->is_in_ashram > 0 ? "Yes" : "No";
+            $price = $item->price ." ". $item->currency;
 
             $update[] = $item->id;
 
-            $csv_data .= "{$item->id},{$sex},{$name},{$baptism},{$date},{$item->yoga_year},{$city},{$aza},{$item->yoga_attendance},{$is_instructor},{$is_in_ashram},{$item->attendance},{$price},{$item->payment},{$image}\n";
+            $csv_data .= "{$item->id},{$sex},{$name},{$baptism},{$date},{$item->user->yoga_year},{$city},{$aza},{$item->user->yoga_attendance},{$is_instructor},{$is_in_ashram},{$item->user->yoga_attendance},{$price},{$item->payment},{$image}\n";
 
             $zip->addFile('storage/'. $item->picture_front, $image);
         }

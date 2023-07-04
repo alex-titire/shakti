@@ -77,9 +77,7 @@ class User extends Resource
             Text::make('First Name')->nullable(),
             Text::make('Last Name')->nullable()->sortable(),
             Text::make('Baptism Name')->nullable(),
-            Text::make('Yoga Year', function() {
-                return Carbon::now()->year - $this->yoga_year + (Carbon::now()->month < 9 ? 0 : 1);
-            })->hideFromIndex()->nullable(),
+            Text::make('Yoga Year')->hideFromIndex()->nullable(),
             Text::make('City')->hideFromIndex()->nullable()->sortable(),
             Date::make('Date of birth', 'dob')->hideFromIndex()->nullable(),
             Select::make('Gender')->hideFromIndex()->nullable()->options([

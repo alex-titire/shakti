@@ -9,7 +9,6 @@ use App\Models\Event;
 use App\Models\EventPage;
 use App\Models\Order;
 use App\Models\OrderStatus;
-use App\Models\Subscriber;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
