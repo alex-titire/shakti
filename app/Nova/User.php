@@ -3,10 +3,14 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rules;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -32,7 +36,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'id', 'name', 'email', 'first_name', 'last_name', 'baptism_name'
     ];
 
     /**
@@ -53,7 +57,7 @@ class User extends Resource
         return [
             ID::make()->sortable(),
 
-            Gravatar::make()->maxWidth(50),
+            // Gravatar::make()->maxWidth(50),
 
             Text::make('Name')
                 ->sortable()
@@ -69,6 +73,42 @@ class User extends Resource
                 ->onlyOnForms()
                 ->creationRules('required', Rules\Password::defaults())
                 ->updateRules('nullable', Rules\Password::defaults()),
+
+            Text::make('First Name')->nullable(),
+            Text::make('Last Name')->nullable()->sortable(),
+            Text::make('Baptism Name')->nullable(),
+            Text::make('Yoga Year', function() {
+                return Carbon::now()->year - $this->yoga_year + (Carbon::now()->month < 9 ? 0 : 1);
+            })->hideFromIndex()->nullable(),
+            Text::make('City')->hideFromIndex()->nullable()->sortable(),
+            Date::make('Date of birth', 'dob')->hideFromIndex()->nullable(),
+            Select::make('Gender')->hideFromIndex()->nullable()->options([
+                'M' => 'Man',
+                'F' => 'Woman',
+            ])->filterable(),
+            Select::make('AZA', 'aza')->hideFromIndex()->nullable()->options([
+                0 => 'None',
+                1 => 'AZA1',
+                2 => 'AZA2',
+                3 => 'AZA3'
+            ]),
+            Select::make('Attends courses in', 'yoga_attendance')
+                ->hideFromIndex()
+                ->filterable()
+                ->options([
+                    'EN' => 'EN',
+                    'RO' => 'RO'
+                ]),
+            Select::make('Language')
+                ->hideFromIndex()
+                ->nullable()
+                ->filterable()
+                ->options([
+                    'en' => 'EN',
+                    'ro' => 'RO'
+                ]),
+            Boolean::make('Is instructor')->hideFromIndex(),
+            Boolean::make('Is in ashram')->hideFromIndex(),
         ];
     }
 

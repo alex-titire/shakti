@@ -220,9 +220,9 @@ class Event extends Resource
     protected function notificationFields()
     {
         return [
-            BelongsTo::make('Email confirmation card', 'email_card', Notification::class)->nullable(),
-            BelongsTo::make('Email confirmation cash', 'email_cash', Notification::class)->nullable(),
-            BelongsTo::make('Email confirmation bank', 'email_bank', Notification::class)->nullable(),
+            BelongsTo::make('Email confirmation card', 'email_card', Notification::class)->nullable()->hideFromIndex(),
+            BelongsTo::make('Email confirmation cash', 'email_cash', Notification::class)->nullable()->hideFromIndex(),
+            BelongsTo::make('Email confirmation bank', 'email_bank', Notification::class)->nullable()->hideFromIndex(),
         ];
     }
 

@@ -97,71 +97,35 @@ class Order extends Model
         );
     }
 
-    /* public function getPaymentLink() {
-
-        switch ($this->price / 100) {
-
-            case 45 :
-                $link = 'https://mpy.ro/fxpkbpev';
-                break;
-
-            case 65 :
-                $link = 'https://mpy.ro/fxpkbnev';
-                break;
-
-            case 90 :
-                $link = 'https://mpy.ro/fxpkbmev';
-                break;
-
-            case 150 :
-                $link = 'https://mpy.ro/fxpkbkev';
-                break;
-
-            case 175 :
-                $link = 'https://mpy.ro/fxpkbjev';
-                break;
-
-
-
-            case 205:
-                $link = 'https://mpy.ro/fxpkbjev';
-                break;
-
-            case 180:
-                $link = 'https://mpy.ro/fxpkbkev';
-                break;
-
-            case 100:
-                $link = 'https://mpy.ro/fxpkbmev';
-                break;
-
-            case 75:
-                $link = 'https://mpy.ro/fxpkbnev';
-                break;
-
-            case 55:
-                $link = 'https://mpy.ro/fxpkbpev';
-                break;
-
-            default:
-                $link = '';
-        }
-
-        return $link;
-    } */
-
     public function save_image(Request $request, $attribute) {
 
-        $img = Image::make($request->$attribute)->resize(null, 1500, function ($constraint) {
-            $constraint->aspectRatio();
-            $constraint->upsize();
-        });
+        try {
+            $img = Image::make($request->$attribute)->resize(null, 1500, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+        }
+        catch(\Exception $e) {
+
+            Log::warning('Image could not be processed.', ['id' => $this->id]);
+
+            return false;
+        }
 
         $name = $this->id ."-". Str::slug($request->last_name ." ". $request->first_name, "-");
         $file = "registrations/{$this->event_id}/". $name .".". $request->file($attribute)->extension();
 
 //        $img->save(public_path() ."/". $file, 80);
-        Storage::disk('public')->put($file, (string) $img->encode('jpg', '80'));
+
+        try {
+
+            Storage::disk('public')->put($file, (string) $img->encode('jpg', '80'));
+        }
+        catch(\Exception $e) {
+
+            Log::warning('Image could not be saved.', ['id' => $this->id, 'file' => $file]);
+            return false;
+        }
 
         return $file;
     }

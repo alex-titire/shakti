@@ -15,7 +15,7 @@ class OrderComplete extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $currencySymbol, $payment_link, $mail, $find, $replace;
+    public $currencySymbol, $mail, $find, $replace;
 
     /**
      * Create a new message instance.
@@ -23,7 +23,6 @@ class OrderComplete extends Mailable
     public function __construct(public Order $order)
     {
         $this->currencySymbol = ($order->currency == "eur" ? "€" : "Lei");
-        $this->payment_link = $order->getPaymentLink();
 
         switch ($order->payment) {
             case 'card':
@@ -41,7 +40,7 @@ class OrderComplete extends Mailable
         }
 
         $this->find = ['{first_name}', '{last_name}', '{order_id}', '{order_total}', '{order_currency}', '{order_payment}'];
-        $this->replace = [$order->baptism_name ?? $order->first_name, $order->last_name, $order->id, $order->price / 100, $order->currency, $order->payment];
+        $this->replace = [$order->user->baptism_name ?? $order->first_name, $order->last_name, $order->id, $order->price, $this->currencySymbol, $order->payment];
     }
 
     /**

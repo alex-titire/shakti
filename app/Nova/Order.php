@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
@@ -45,7 +46,6 @@ class Order extends Resource
         'event_id',
         'first_name',
         'last_name',
-        'baptism_name',
         'email',
         'mtv_code'
     ];
@@ -88,14 +88,6 @@ class Order extends Resource
             BelongsTo::make('User')->withoutTrashed()->nullable()->searchable()->filterable(),
             Text::make('First Name')->nullable(),
             Text::make('Last Name')->nullable()->sortable(),
-            Text::make('Baptism Name')->nullable(),
-            Select::make('Sex')->hideFromIndex()->nullable()->options([
-                'M' => 'Man',
-                'F' => 'Woman',
-            ])->filterable(),
-            Text::make('Yoga Year')->hideFromIndex()->nullable(),
-            Text::make('City')->hideFromIndex()->nullable()->sortable(),
-            Date::make('Date of birth', 'dob')->hideFromIndex()->nullable(),
             Text::make('Phone')->nullable(),
             Email::make('Email')->nullable()->sortable(),
             Image::make('Picture Front')->hideWhenCreating()
@@ -104,30 +96,13 @@ class Order extends Resource
                     return [
                         'picture_front' => $img
                     ];
-                }),
-            Select::make('AZA', 'aza')->hideFromIndex()->nullable()->options([
-                0 => 'None',
-                1 => 'AZA1',
-                2 => 'AZA2',
-                3 => 'AZA3'
-            ]),
-            Select::make('Attends courses in', 'yoga_attendance')
-                ->hideFromIndex()
-                ->filterable()
-                ->options([
-                    'EN' => 'EN',
-                    'RO' => 'RO'
-                ]),
-            Select::make('Language')
-                ->hideFromIndex()
-                ->nullable()
-                ->filterable()
-                ->options([
-                    'en' => 'EN',
-                    'ro' => 'RO'
-                ]),
-            Boolean::make('Is instructor')->hideFromIndex(),
-            Boolean::make('Is in ashram')->hideFromIndex(),
+                })
+                ->preview(function ($value, $disk) {
+                    return $value
+                                ? Storage::disk($disk)->url($value) . "?t=" . Str::random(10)
+                                : null;
+                })
+                ->rules('nullable', 'image'),
             Select::make('Event participation', 'attendance')
                 ->nullable()
                 ->filterable()
@@ -140,22 +115,19 @@ class Order extends Resource
             Currency::make('Price')
                 ->hideFromIndex()
                 ->currency($this->currency ?? 'RON')
-                ->asMinorUnits()
-                ->resolveUsing(function ($value) {
-                    return $value / 100;
-                })
                 ->default(0)
-                ->onlyOnForms(),
+                ->onlyOnForms()
+                ->rules('integer', 'min:0'),
             Select::make('Currency')->hideFromIndex()->filterable()->options([
-                'EUR' => 'EUR',
-                'RON' => 'RON'
-            ]),
+                'eur' => 'EUR',
+                'ron' => 'RON'
+            ])->rules('required'),
             Select::make('Payment')->filterable()->sortable()->options([
-                'bank'      => 'Bank transfer',
-                'card'      => 'Online Card',
-                'cash'      => 'Cash'
-            ]),
-            Textarea::make('Comments')->rows(3)->showOnPreview(),
+                'bank'  => 'Bank transfer',
+                'card'  => 'Online Card',
+                'cash'  => 'Cash'
+            ])->rules('required'),
+            Textarea::make('Comments')->rows(3)->showOnPreview()->nullable(),
             Text::make('Mtv Code')->nullable(),
             DateTime::make('Code sent at')->nullable()->hideFromIndex(),
             BelongsTo::make('Event')->withoutTrashed()->nullable()->filterable()->hideFromIndex(),
