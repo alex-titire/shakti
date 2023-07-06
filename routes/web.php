@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,14 +65,20 @@ Route::prefix('crons')->group(function() {
 //});
 
 Route::get('/mailable', function () {
-    $item = \App\Models\Order::find(7);
+    $item = \App\Models\Order::find(1079);
 
-//    Mail::to("alex.titire@pm.me")->send(new \App\Mail\EmailEventFinished($item));
-    return new \App\Mail\OrderComplete($item);
+    /* try {
+        Mail::to("alex.titire@pm.me")->send(new \App\Mail\EmailCodeMtvSent($item));
+    }
+    catch (\Exception $e) {
+        dd($e->getMessage());
+    } */
+
+    return new \App\Mail\EmailCodeMtvSent($item);
 });
 
 Route::get('/mailable/en', function () {
-    $item = \App\Models\Order::find(342);
+    $item = \App\Models\Order::find(1057);
 
 //    Mail::to($item->email)->send(new \App\Mail\EmailEventFinished($item));
     return new \App\Mail\EmailCodeMtvSent($item);
@@ -98,7 +105,7 @@ Route::get('/notification-check/{nid}/{lang}', function($nid, $lang = "ro") {
 
 Route::get('assign-codes', function() {
 
-        $event_id = 2;
+        $event_id = 3;
 
         $updates = \App\Models\Order::whereNull('mtv_code')
                 ->where('event_id', $event_id)

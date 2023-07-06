@@ -37,6 +37,7 @@ class Order extends Model
         'is_instructor' => 'boolean',
         'is_in_ashram' => 'boolean',
         'code_sent_at' => 'datetime',
+        'code_error_at' => 'datetime',
         'email_confirmation' => 'datetime'
     ];
 
@@ -141,6 +142,8 @@ class Order extends Model
         }
         catch (\Exception $e) {
             Log::warning('Email code failed to send.', ['id' => $this->id, 'email' => $this->email]);
+            $this->code_error_at = date("Y-m-d H:i:s");
+            $this->save();
 
             return false;
         }
