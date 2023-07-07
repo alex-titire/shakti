@@ -59,7 +59,7 @@ class User extends Resource
 
             // Gravatar::make()->maxWidth(50),
 
-            Text::make('Name')
+            Text::make('Full Name', 'name')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
@@ -71,13 +71,14 @@ class User extends Resource
 
             Password::make('Password')
                 ->onlyOnForms()
-                ->creationRules('required', Rules\Password::defaults())
+                ->creationRules('nullable', Rules\Password::defaults())
                 ->updateRules('nullable', Rules\Password::defaults()),
 
             Text::make('First Name')->nullable(),
             Text::make('Last Name')->nullable()->sortable(),
             Text::make('Baptism Name')->nullable(),
-            Text::make('Yoga Year')->hideFromIndex()->nullable(),
+            Text::make('Phone')->nullable(),
+            Text::make('Yoga Year')->hideFromIndex()->default(0),
             Text::make('City')->hideFromIndex()->nullable()->sortable(),
             Date::make('Date of birth', 'dob')->hideFromIndex()->nullable(),
             Select::make('Gender')->hideFromIndex()->nullable()->options([

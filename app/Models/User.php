@@ -110,8 +110,8 @@ class User extends Authenticatable
     protected function yogaYear(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => (int) Carbon::now()->year - $value + (Carbon::now()->month < 9 ? 0 : 1),
-            set: fn (string $value) => (int) Carbon::now()->year - $value - (Carbon::now()->month < 9 ? 0 : 1),
+            get: fn ($value) => (int) Carbon::now()->year - ($value ?? Carbon::now()->year) + (Carbon::now()->month < 9 ? 0 : 1),
+            set: fn ($value) => (int) Carbon::now()->year - $value - (Carbon::now()->month < 9 ? 0 : 1),
         );
     }
 
