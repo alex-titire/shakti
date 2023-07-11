@@ -41,7 +41,7 @@ class EmailCodeMtvSent extends Mailable
         return new Envelope(
             from: new Address('no-reply@venus.org.ro', 'Venus'),
             replyTo: [
-                new Address(config('site.contact_email')),
+                new Address($this->order->event->event_email ?? config('site.contact_email')),
             ],
             subject: __('general.mail_subject_code_sent'),
         );

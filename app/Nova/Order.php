@@ -137,6 +137,7 @@ class Order extends Resource
             Textarea::make('Comments')->rows(3)->showOnPreview()->nullable(),
             Text::make('Mtv Code')->nullable(),
             DateTime::make('Code sent at')->nullable()->hideFromIndex(),
+            DateTime::make('Code error at')->nullable()->hideFromIndex(),
             BelongsTo::make('Event')->withoutTrashed()->nullable()->filterable()->hideFromIndex(),
         ];
     }

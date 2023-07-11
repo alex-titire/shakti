@@ -2,7 +2,7 @@
 
 return [
 
-    'contact_email' => 'shaktiinextaz@gmail.com',
+    'contact_email' => 'tabaramahashakti@gmail.com',
     'bank_ron' => 'RO39BTRLRONCRT0397603701',
     'bank_eur' => 'RO86BTRLEURCRT0397603701',
     'statuses' => [

@@ -7,6 +7,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\Email;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Markdown;
@@ -220,6 +221,7 @@ class Event extends Resource
     protected function notificationFields()
     {
         return [
+            Email::make('Event Email', 'event_email')->required()->hideFromIndex(),
             BelongsTo::make('Email confirmation card', 'email_card', Notification::class)->nullable()->hideFromIndex(),
             BelongsTo::make('Email confirmation cash', 'email_cash', Notification::class)->nullable()->hideFromIndex(),
             BelongsTo::make('Email confirmation bank', 'email_bank', Notification::class)->nullable()->hideFromIndex(),
