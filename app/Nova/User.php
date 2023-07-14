@@ -7,6 +7,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rules;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\Email;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
@@ -29,6 +30,16 @@ class User extends Resource
      * @var string
      */
     public static $title = 'name';
+
+    /**
+    * Get the search result subtitle for the resource.
+    *
+    * @return string
+    */
+    public function subtitle()
+    {
+        return "@ {$this->email}";
+    }
 
     /**
      * The columns that should be searched.
@@ -63,7 +74,7 @@ class User extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('Email')
+            Email::make('Email')
                 ->sortable()
                 ->rules('required', 'email', 'max:254')
                 ->creationRules('unique:users,email')

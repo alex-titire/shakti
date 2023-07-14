@@ -23,7 +23,7 @@ return new class extends Migration
             $table->text('content_html_en');
             $table->text('content_text_ro');
             $table->text('content_text_en');
-            $table->tinyInteger('active')->default(0);
+            $table->tinyInteger('active')->index()->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

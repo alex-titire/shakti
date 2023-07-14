@@ -2,9 +2,13 @@
 
 namespace App\Mail;
 
+use App\Models\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
 
@@ -13,41 +17,65 @@ class EmailDynamicNotification extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * The user instance.
+     * The order instance.
+     *
+     * @var \App\Models\Notification
      */
-    public $user;
-
     public $mail;
 
     /**
-     * Create a new message instance.
-     *
-     * @return void
+     * other public variables
      */
-    public function __construct($mail, $user)
+    public $user, $find, $replace;
+
+    /**
+     * Create a new message instance.
+     */
+    public function __construct(Notification $mail, $user)
     {
         $this->mail = $mail;
-        $this->user = $user;
 
-        $this->mail->content_html_ro = str_replace('{first_name}', $user->first_name, $mail->content_html_ro);
-        $this->mail->content_html_en = str_replace('{first_name}', $user->first_name, $mail->content_html_en);
+        $this->find = ['{first_name}'];
+        $this->replace = [strlen(trim($user->baptism_name)) > 0 ? $user->baptism_name : $user->first_name];
 
-//        App::setLocale($user->language);
+        App::setLocale($user->language);
     }
 
     /**
-     * Build the message.
-     *
-     * @return $this
+     * Get the message envelope.
      */
-    public function build()
+    public function envelope(): Envelope
     {
-        return $this->from('no-reply@venus.org.ro', $this->mail->from_name)
-                    ->subject($this->mail->subject)
-                    ->replyTo(config('site.contact_email'))
-                    ->markdown('emails.custom_notification')
-                        ->with(
-                            ['title' => $this->mail->subject]
-                        );
+        return new Envelope(
+            from: new Address('no-reply@venus.org.ro', $this->mail->from_name ?? 'Venus'),
+            replyTo: [
+                new Address($this->mail->reply_to ?? config('site.contact_email')),
+            ],
+            subject: $this->mail->subject,
+        );
+    }
+
+    /**
+     * Get the message content definition.
+     */
+    public function content(): Content
+    {
+        return new Content(
+            markdown: 'emails.custom_notification',
+            text: '',
+            with: [
+                'title' => $this->mail->subject
+            ]
+        );
+    }
+
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
+    public function attachments(): array
+    {
+        return [];
     }
 }

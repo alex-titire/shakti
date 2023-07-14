@@ -3,9 +3,13 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\Email;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Markdown;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -52,15 +56,31 @@ class Notification extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Key')->required()->help('A unique key used to identify the notification.'),
-            Text::make('From Name')->required(),
-            Text::make('Subject Ro')->required(),
-            Text::make('Subject En')->required(),
+            Text::make('Key')->rules('required', 'max:255')->help('A unique key used to identify the notification.'),
+            Text::make('From Name')->rules('required', 'max:255'),
+            Email::make('Reply To', 'reply_to')->rules('required', 'email'),
+            Text::make('Subject Ro')->rules('required', 'max:255'),
+            Text::make('Subject En')->rules('required', 'max:255'),
             Markdown::make('Content Html ro')->preset('commonmark')->nullable(),
             Markdown::make('Content Html en')->preset('commonmark')->nullable(),
             Textarea::make('Content Text ro')->nullable()->rows(7),
             Textarea::make('Content Text en')->nullable()->rows(7),
-            Boolean::make('Active')->default(1)
+            Select::make('Type')->options([
+                'transactional' => 'Transactional',
+                'broadcast' => 'Broadcast',
+            ])
+            ->displayUsingLabels()
+            ->rules('required'),
+            Boolean::make('Active')->default(1),
+            BelongsToMany::make('Users', 'users', User::class)
+                ->fields(function($request, $relatedModel) {
+                    return [
+                        DateTime::make('Sent Time')->nullable(),
+                        DateTime::make('Error Time')->nullable(),
+                    ];
+                })
+                ->searchable()
+                ->withSubtitles(),
         ];
     }
 

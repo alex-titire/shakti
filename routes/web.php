@@ -47,8 +47,9 @@ Route::prefix($locale)->group(function () use ($language) {
 // CRONS
 Route::prefix('crons')->group(function() {
 
-    Route::get('/send-code-email', [\App\Http\Controllers\CronsController::class, 'sendCodeEmailToSubscribers']);
-    Route::get('/send-custom-notification', [\App\Http\Controllers\CronsController::class, 'sendCustomNotification']);
+    Route::get('send-code-email', [\App\Http\Controllers\CronsController::class, 'sendCodeEmailToSubscribers']);
+    Route::get('send-gift-email', [\App\Http\Controllers\CronsController::class, 'sendGiftEmail']);
+    Route::get('send-custom-notifications', [\App\Http\Controllers\CronsController::class, 'sendNotifications']);
 
 //    Route::get('/send-thank-you-email', [\App\Http\Controllers\CronsController::class, 'sendThankYouEmailToSubscribers']);
 //    Route::get('/confirm-gift-approval/{id}', [\App\Http\Controllers\CronsController::class, 'confirmGift'])->name('giftConfirmation');

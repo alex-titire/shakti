@@ -17,6 +17,8 @@ class CreateNotificationUserTable extends Migration
             $table->id();
             $table->foreignId('notification_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->timestamp('sent_time')->nullable();
+            $table->timestamp('error_time')->nullable();
             $table->timestamps();
         });
     }

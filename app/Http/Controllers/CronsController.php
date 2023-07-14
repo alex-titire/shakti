@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Mail\EmailCodeMtvSent;
 use App\Mail\EmailDynamicNotification;
 use App\Mail\EmailEventFinished;
-use App\Models\MailingList;
-use App\Models\MailingListSubscriber;
 use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Setting;
 use App\Models\Subscriber;
+use App\Models\User;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -37,6 +37,60 @@ class CronsController extends Controller
             foreach ($subs as $item) {
                 $item->send_registration_code();
             }
+    }
+
+    public function sendNotifications() {
+
+        // wget -O /dev/null https://registration.venus.org.ro/crons/send-custom-notifications
+
+        $notification = Notification::where('active', 1)
+                                    ->where('type', 'broadcast')
+                                    ->first();
+
+        if ( ! is_null($notification)) {
+
+            $subs = User::select('first_name', 'baptism_name', 'email', 'gender', 'language', 'notification_user.id')
+                    ->join('notification_user', function(JoinClause $join) use ($notification) {
+                        $join->on('users.id', '=', 'notification_user.user_id')
+                            ->where('notification_user.notification_id', '=', $notification->id)
+                            ->whereNull('notification_user.sent_time')
+                            ->whereNull('notification_user.error_time');
+                    })
+                    ->take(5)
+                    ->get();
+
+            if (count($subs)) {
+
+                foreach ($subs as $item) {
+
+                    try {
+                        Mail::to($item->email)->send(new EmailDynamicNotification($notification, $item));
+                        DB::table('notification_user')
+                            ->where('id', $item->id)
+                            ->update(['sent_time' => date("Y-m-d H:i:s")]);
+                    }
+                    catch (\Exception $e) {
+                        Log::warning('Email notification failed to send.', ['user_id' => $item->id, 'email' => $item->email]);
+                        DB::table('notification_user')
+                            ->where('id', $item->id)
+                            ->update(['error_time' => date("Y-m-d H:i:s")]);
+                    }
+                }
+
+                if (count($subs) < 5) {
+                    $notification->active = 0;
+                    $notification->save();
+                }
+            }
+            else {
+                echo "no more users to send notifications to\n";
+                $notification->active = 0;
+                $notification->save();
+            }
+        }
+        else {
+            echo "no active notifications\n";
+        }
     }
 
     public function sendThankYouEmailToSubscribers() {

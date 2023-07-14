@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\App;
 
@@ -53,5 +54,15 @@ class Notification extends Model
         return Attribute::make(
             get: fn ($value, $attributes) => $attributes["content_text_". App::currentLocale()]
         );
+    }
+
+    /**
+     * Get the Users that belongs the Notification
+     */
+    public function users(): BelongsToMany {
+
+        return $this->belongsToMany(User::class)
+            ->using(NotificationUser::class)
+            ->withPivot('sent_time', 'error_time');
     }
 }

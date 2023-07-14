@@ -30,4 +30,11 @@ class MailingList extends Model
     public function subscribers() {
         return $this->belongsToMany(Subscriber::class)->withPivot('last_notification_id', 'status');
     }
+
+    /**
+     * Get the Users belonging to the List
+     */
+    public function users() {
+        return $this->belongsToMany(User::class);
+    }
 }
