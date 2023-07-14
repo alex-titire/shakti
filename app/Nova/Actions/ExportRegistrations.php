@@ -44,6 +44,12 @@ class ExportRegistrations extends Action
             Text::make('File name'),
             Select::make('Set status', 'status')->options($options),
             Boolean::make('Skip same status', 'status_check')->default(1),
+            Select::make('Gender')->options([
+                'all' => 'All together',
+                'separate' => 'Separate files',
+                'm' => 'Men only',
+                'f' => 'Women only'
+            ])->default('all')
         ];
     }
 
@@ -66,7 +72,12 @@ class ExportRegistrations extends Action
             exit("cannot open <$filename>\n");
         }
 
-        $csv_data = "ID,SEX,NUME COMPLET,NUME BOTEZ,DATA NASTERII,AN CURS,ORAS,TAPAS AZA,CURSANT,INSTRUCTOR,ASHRAM,PARTICIPARE,PRET,PLATA,IMAGINE\n";
+        $headline = "ID,SEX,NUME COMPLET,NUME BOTEZ,DATA NASTERII,AN CURS,ORAS,TAPAS AZA,CURSANT,INSTRUCTOR,ASHRAM,PARTICIPARE,PRET,PLATA,IMAGINE\n";
+        if ($fields->gender == 'separate')
+            $csv_data['m'] = $csv_data['f'] = $headline;
+        else
+            $csv_data = $headline;
+
         $update = [];
 
 //        $status = OrderStatus::firstOrCreate(
@@ -74,9 +85,13 @@ class ExportRegistrations extends Action
 //            ['caption' => 'Trimis']
 //        );
 
-        foreach ($models as $item) {
+        $users = $models->unique('user_id');
+        foreach ($users as $item) {
 
             if ($item->order_status_id == $fields['status'] && (int) $fields['status_check'] > 0)
+                continue ;
+
+            if (($fields->gender == 'm' && strtolower($item->user->gender) != 'm') || ($fields->gender == 'f' && strtolower($item->user->gender) != 'f'))
                 continue ;
 
             $sex = strtoupper($item->user->gender);
@@ -92,14 +107,28 @@ class ExportRegistrations extends Action
 
             $update[] = $item->id;
 
-            $csv_data .= "{$item->id},{$sex},{$name},{$baptism},{$date},{$item->user->yoga_year},{$city},{$aza},{$item->user->yoga_attendance},{$is_instructor},{$is_in_ashram},{$item->user->yoga_attendance},{$price},{$item->payment},{$image}\n";
+            $row = "{$item->id},{$sex},{$name},{$baptism},{$date},{$item->user->yoga_year},{$city},{$aza},{$item->user->yoga_attendance},{$is_instructor},{$is_in_ashram},{$item->user->yoga_attendance},{$price},{$item->payment},{$image}\n";
+
+            if ($fields->gender == 'separate')
+                $csv_data[strtolower($item->user->gender)] .= $row;
+            else
+                $csv_data .= $row;
 
             $zip->addFile('storage/'. $item->picture_front, $image);
         }
 
-        $csv_data = preg_replace('/[\s\t]{2,}/i', ' ', $csv_data);
+        if ($fields->gender == 'separate') {
 
-        $zip->addFromString("date.csv", $csv_data);
+            $csv_data['m'] = preg_replace('/[\s\t]{2,}/i', ' ', $csv_data['m']);
+            $csv_data['f'] = preg_replace('/[\s\t]{2,}/i', ' ', $csv_data['f']);
+
+            $zip->addFromString("date_m.csv", $csv_data['m']);
+            $zip->addFromString("date_f.csv", $csv_data['f']);
+        }
+        else {
+            $csv_data = preg_replace('/[\s\t]{2,}/i', ' ', $csv_data);
+            $zip->addFromString("date.csv", $csv_data);
+        }
 
         $zip->close();
 
