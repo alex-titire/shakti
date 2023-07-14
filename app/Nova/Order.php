@@ -216,6 +216,7 @@ class Order extends Resource
 
             new Actions\ExportRegistrations,
             new Actions\CustomExports,
+            new Actions\AddOrderUsersToNotification,
         ];
     }
 }

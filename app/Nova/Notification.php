@@ -31,6 +31,16 @@ class Notification extends Resource
     public static $title = 'key';
 
     /**
+    * Get the search result subtitle for the resource.
+    *
+    * @return string
+    */
+    public function subtitle()
+    {
+        return "Subject: {$this->subject_ro}";
+    }
+
+    /**
      * The columns that should be searched.
      *
      * @var array

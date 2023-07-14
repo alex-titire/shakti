@@ -163,6 +163,8 @@ class User extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [];
+        return [
+            new Actions\AddUsersToNotification,
+        ];
     }
 }
