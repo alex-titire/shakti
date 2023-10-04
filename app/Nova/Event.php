@@ -15,8 +15,6 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
-use Symfony\Component\Intl\Currencies;
-use Vyuldashev\NovaMoneyField\Money;
 
 class Event extends Resource
 {
@@ -118,42 +116,22 @@ class Event extends Resource
                 ->required()
                 ->hideFromIndex()
                 ->currency('RON')
-                ->asMinorUnits()
-                ->resolveUsing(function ($value) {
-                    return $value / 100;
-                })
                 ->help('Default price for general public'),
             Currency::make('Price Online Ron')
                 ->hideFromIndex()
                 ->currency('RON')
-                ->asMinorUnits()
-                ->resolveUsing(function ($value) {
-                    return $value / 100;
-                })
                 ->help('Discount price for online attendance'),
             Currency::make('Price Coordinator Ron')
                 ->hideFromIndex()
                 ->currency('RON')
-                ->asMinorUnits()
-                ->resolveUsing(function ($value) {
-                    return $value / 100;
-                })
                 ->help('Discount price for Teachers and Coordinators'),
             Currency::make('Price Ashram Ron')
                 ->hideFromIndex()
                 ->currency('RON')
-                ->asMinorUnits()
-                ->resolveUsing(function ($value) {
-                    return $value / 100;
-                })
                 ->help('Discount price for people living in Ashram'),
             Currency::make('Early Bird Value Ron')
                 ->hideFromIndex()
                 ->currency('RON')
-                ->asMinorUnits()
-                ->resolveUsing(function ($value) {
-                    return $value / 100;
-                })
                 ->help('Early Bird Discount amount configured by Type. DO NOT add % sign for percentage discount type.'),
             Markdown::make('Picture Info Ro')->required()->hideFromIndex()->preset('commonmark')->help('General rules for picture submissions'),
         ];
@@ -172,42 +150,22 @@ class Event extends Resource
                 ->required()
                 ->hideFromIndex()
                 ->currency('EUR')
-                ->asMinorUnits()
-                ->resolveUsing(function ($value) {
-                    return $value / 100;
-                })
                 ->help('Default price for general public abroad'),
             Currency::make('Price Online Eur')
                 ->hideFromIndex()
                 ->currency('EUR')
-                ->asMinorUnits()
-                ->resolveUsing(function ($value) {
-                    return $value / 100;
-                })
                 ->help('Discount price for online attendance'),
             Currency::make('Price Coordinator Eur')
                 ->hideFromIndex()
                 ->currency('EUR')
-                ->asMinorUnits()
-                ->resolveUsing(function ($value) {
-                    return $value / 100;
-                })
                 ->help('Discount price for Teachers and Coordinators abroad'),
             Currency::make('Price Ashram Eur')
                 ->hideFromIndex()
                 ->currency('EUR')
-                ->asMinorUnits()
-                ->resolveUsing(function ($value) {
-                    return $value / 100;
-                })
                 ->help('Discount price for people living in Ashram\'s abroad'),
             Currency::make('Early Bird Value Eur')
                 ->hideFromIndex()
                 ->currency('EUR')
-                ->asMinorUnits()
-                ->resolveUsing(function ($value) {
-                    return $value / 100;
-                })
                 ->help('Early Bird Discount amount configured by Type. DO NOT add % sign for percentage discount type.'),
             Markdown::make('Picture Info En')->required()->hideFromIndex()->preset('commonmark')->help('General rules for picture submissions'),
         ];
