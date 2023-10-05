@@ -21,7 +21,7 @@ class CronsController extends Controller
 
         // wget -O /dev/null https://registration.venus.org.ro/crons/send-code-email
 
-        $event_id = 3;
+        $event_id = 4;
 
         $subs = Order::whereNotNull('mtv_code')
             ->where('event_id', $event_id)

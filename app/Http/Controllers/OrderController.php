@@ -83,7 +83,7 @@ class OrderController extends Controller
                 'product_data' => [
                     'name' => $order->event->title,
                 ],
-                'unit_amount' => ($order->email == "victoriatrif11@gmail.com" ? 200 : $order->price * 100),
+                'unit_amount' => ($order->email == "dragusin.alexandra@yahoo.com" ? 200 : $order->price * 100),
             ],
             'quantity' => 1,
         ]], [
@@ -104,8 +104,6 @@ class OrderController extends Controller
             $stripeCharge = $order->user->charge(
                 200, $request->pid, ['currency' => 'ron']
             );
-
-            dd($stripeCharge);
 
             $order->stripe_status = $stripeCharge->status;
         }

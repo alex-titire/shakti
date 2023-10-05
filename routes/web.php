@@ -106,7 +106,7 @@ Route::get('/notification-check/{nid}/{lang}', function($nid, $lang = "ro") {
 
 Route::get('assign-codes', function() {
 
-        $event_id = 3;
+        $event_id = 4;
 
         $updates = \App\Models\Order::whereNull('mtv_code')
                 ->where('event_id', $event_id)
