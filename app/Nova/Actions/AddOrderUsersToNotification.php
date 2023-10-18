@@ -46,7 +46,7 @@ class AddOrderUsersToNotification extends Action
     public function fields(NovaRequest $request)
     {
         $notifications = Notification::select('id', 'key', 'subject_ro')->get()->mapWithKeys(function($item, $key) {
-            return [$item->id => $item['key'] . " ({$item['subject_ro']})"];
+            return [$item->id => $item['key'] . " ({$item['key']})"];
         });
 
         return [
